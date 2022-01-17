@@ -1,24 +1,57 @@
 const gulp = require('gulp')
 const csscomb = require('gulp-csscomb')
-const json = require("gulp-jsonlint")
+const jsonlint = require("gulp-jsonlint")
+const uglify = require('gulp-uglify')
+const concat = require('gulp-concat')
+const del = require('del')
 const log = require('fancy-log')
 const ohtml = require('gulp-htmllint')
 const colors = require('ansi-colors')
-const ojs = require('gulp-eslint')
 const babel = require('gulp-babel')
 
+const paths = {
+    js: {
+        src: './filestocheck/*.js',
+        dest: './assets/scripts'
+    },
+    json: {
+        src: './filestocheck/*.json',
+        dest: './assets/scripts'
+    },
+    css: {
+        src: './filestocheck/*.css',
+        dest: './assets/style'
+    },
+    html: {
+        src: './filestocheck/*.html',
+        dest: './assets'
+    }
+}
+
+const clean = () => {
+    return del(['assets'])
+}
+
 const ccss = () => {
-    return gulp.src('./assets/style/*.css')
+    return gulp.src(paths.css.src)
         .pipe(csscomb())
+        .pipe(uglify())
+        .pipe(concat('main.min.js'))
+        .pipe(gulp.dest(paths.js.dest))
 }
 const myCustomReporter = (file) => {
     log('File ' + file.path + ' is not valid JSON.')
 }
+
 const cjson = () => {
-    return gulp.src('./assets/scripts/*.json')
-        .pipe(json())
-        .pipe(json.reporter(myCustomReporter))
+    return gulp.src(paths.json.src)
+        .pipe(jsonlint())
+        .pipe(jsonlint.reporter(myCustomReporter))
+        .pipe(uglify())
+        .pipe(concat('main.min.js'))
+        .pipe(gulp.dest(paths.js.dest))
 }
+
 const htmllintReporter = (filepath, issues) => {
     if (issues.length > 0) {
         issues.forEach((issue) => {
@@ -28,36 +61,35 @@ const htmllintReporter = (filepath, issues) => {
     }
 }
 const chtml = () => {
-    return gulp.src('./assets/*.html')
+    return gulp.src(paths.html.src)
         .pipe(ohtml({}, htmllintReporter))
+        .pipe(uglify())
+        .pipe(concat('main.min.js'))
+        .pipe(gulp.dest(paths.js.dest))
 }
+
 const cjs = () => {
-    return gulp.src(['./assets/scripts/*.js'])
+    return gulp.src(paths.js.src, { sourcemaps: true })
         .pipe(babel())
-        .pipe(ojs())
-        .pipe(ojs.format())
-        .pipe(ojs.failAfterError())
+        .pipe(uglify())
+        .pipe(concat('main.min.js'))
+        .pipe(gulp.dest(paths.js.dest))
 }
 const watchjs = () => {
-    return gulp.watch('./assets/scripts/*.js', cjs)
+    return gulp.watch(paths.js.src, cjs)
 }
-const watchjson = () => {
-    return gulp.watch('./assets/scripts/*.js', cjson)
-}
-const watchhtml = () => {
-    return gulp.watch('./assets/*.html', chtml)
-}
+const build = gulp.series(clean, gulp.parallel(cjs))
+
 const watchcss = () => {
-    return gulp.watch('./assets/style/*.css', ccss)
+    return gulp.watch(paths.css.src, ccss)
 }
 
 exports.cjson = cjson
 exports.chtml = chtml
 exports.ccss = ccss
 exports.cjs = cjs
+exports.clean = clean
 exports.watchjs = watchjs
-exports.watchjson = watchjson
-exports.watchhtml = watchhtml
 exports.watchcss = watchcss
 
 //exports.default = 'adefinir'
