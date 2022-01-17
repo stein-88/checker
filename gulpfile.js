@@ -29,8 +29,6 @@ const htmllintReporter = (filepath, issues) => {
 }
 const chtml = () => {
     return gulp.src('./assets/*.html')
-        .pipe(babel())
-        .pipe(ohtml())
         .pipe(ohtml({}, htmllintReporter))
 }
 const cjs = () => {
@@ -47,10 +45,10 @@ const watchjson = () => {
     return gulp.watch('./assets/scripts/*.js', cjson)
 }
 const watchhtml = () => {
-    return gulp.watch('./assets/scripts/*.js', chtml)
+    return gulp.watch('./assets/*.html', chtml)
 }
 const watchcss = () => {
-    return gulp.watch('./assets/scripts/*.js', ccss)
+    return gulp.watch('./assets/style/*.css', ccss)
 }
 
 exports.cjson = cjson
