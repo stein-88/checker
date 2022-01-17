@@ -1,0 +1,23 @@
+.titulo {
+    background: #517b88;
+    font-size: 20px;
+    color: white;
+    padding: 10px 20px;
+}
+
+.corzinha {
+    color: #632a44;
+}
+
+.botao {
+    cursor: pointer;
+    padding: 10px 4rem;
+    color: white;
+    display: inline-block;
+    text-align: center;
+    outline: 0;
+    background-color: #69afe3;
+    border-radius: 25px;
+    border-color: transparent;
+    text-decoration: none;
+}

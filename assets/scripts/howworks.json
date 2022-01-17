@@ -1,0 +1,42 @@
+{
+    "header": {
+        "titulo": "How It Works",
+        "imagem": "linkfdosafd"
+    },
+    "colunas": {
+        "cards": [
+            {
+                "imagem": "sdafsdaf",
+                "titulo": "List",
+                "text": [
+                    "",
+                    ""
+                ]
+            },
+            {
+                "imagem": "sdafsdaf",
+                "titulo": "Request",
+                "text": [
+                    "",
+                    ""
+                ]
+            },
+            {
+                "imagem": "sdafsdaf",
+                "titulo": "Collect",
+                "text": [
+                    "",
+                    ""
+                ]
+            }
+        ]
+    },
+    "service": {
+        "titulo": "Courier Service",
+        "text": [
+            "",
+            "",
+            ""
+        ]
+    }
+}
