@@ -6,15 +6,17 @@
   "author": "WandersonSantos",
   "license": "MIT",
   "scripts": {
-    "ccss": "gulp ccss",
-    "cjs": "gulp cjs",
-    "cjson": "gulp cjson",
-    "chtml": "gulp chtml",
+    "checkcss": "gulp checkcss",
+    "checkjs": "gulp checkjs",
+    "checkjson": "gulp checkjson",
+    "checkhtml": "gulp checkhtml",
     "watchjs": "gulp watchjs",
     "watchjson": "gulp watchjson",
     "watchhtml": "gulp watchhtml",
     "watchcss": "gulp watchcss",
-    "clean": "gulp clean"
+    "clean": "gulp clean",
+    "build": "gulp build",
+    "mincss": "gulp mincss"
   },
   "dependencies": {
     "@babel/core": "^7.16.5",
@@ -25,6 +27,7 @@
     "fancy-log": "^2.0.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-csscomb": "^3.1.0",
     "gulp-htmllint": "^0.0.19",

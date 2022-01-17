@@ -8,6 +8,7 @@ const log = require('fancy-log')
 const ohtml = require('gulp-htmllint')
 const colors = require('ansi-colors')
 const babel = require('gulp-babel')
+const cleanCSS = require('gulp-clean-css')
 
 const paths = {
     js: {
@@ -32,18 +33,25 @@ const clean = () => {
     return del(['assets'])
 }
 
-const ccss = () => {
+const checkcss = () => {
     return gulp.src(paths.css.src)
         .pipe(csscomb())
-        .pipe(uglify())
-        .pipe(concat('main.min.js'))
-        .pipe(gulp.dest(paths.js.dest))
 }
+
+const mincss = () => {
+    return gulp.src(paths.css.src)
+        .pipe(sourcemaps.init())
+        .pipe(cleanCSS())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.css.dest))
+}
+
+
 const myCustomReporter = (file) => {
     log('File ' + file.path + ' is not valid JSON.')
 }
 
-const cjson = () => {
+const checkjson = () => {
     return gulp.src(paths.json.src)
         .pipe(jsonlint())
         .pipe(jsonlint.reporter(myCustomReporter))
@@ -60,7 +68,7 @@ const htmllintReporter = (filepath, issues) => {
         process.exitCode = 1
     }
 }
-const chtml = () => {
+const checkhtml = () => {
     return gulp.src(paths.html.src)
         .pipe(ohtml({}, htmllintReporter))
         .pipe(uglify())
@@ -68,7 +76,7 @@ const chtml = () => {
         .pipe(gulp.dest(paths.js.dest))
 }
 
-const cjs = () => {
+const checkjs = () => {
     return gulp.src(paths.js.src, { sourcemaps: true })
         .pipe(babel())
         .pipe(uglify())
@@ -76,20 +84,22 @@ const cjs = () => {
         .pipe(gulp.dest(paths.js.dest))
 }
 const watchjs = () => {
-    return gulp.watch(paths.js.src, cjs)
+    return gulp.watch(paths.js.src, checkjs)
 }
-const build = gulp.series(clean, gulp.parallel(cjs))
+const build = gulp.series(clean, gulp.parallel(checkjs))
 
 const watchcss = () => {
-    return gulp.watch(paths.css.src, ccss)
+    return gulp.watch(paths.css.src, checkcss)
 }
 
-exports.cjson = cjson
-exports.chtml = chtml
-exports.ccss = ccss
-exports.cjs = cjs
+exports.checkjson = checkjson
+exports.checkhtml = checkhtml
+exports.checkcss = checkcss
+exports.mincss = mincss
+exports.checkjs = checkjs
 exports.clean = clean
 exports.watchjs = watchjs
 exports.watchcss = watchcss
+exports.build = build
 
 //exports.default = 'adefinir'
