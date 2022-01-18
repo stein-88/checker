@@ -4,7 +4,7 @@ const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
 const del = require('del')
 const log = require('fancy-log')
-const ohtml = require('gulp-htmllint')
+const ohhtml = require('gulp-htmllint')
 const colors = require('ansi-colors')
 const babel = require('gulp-babel')
 const cleanCSS = require('gulp-clean-css')
@@ -63,7 +63,7 @@ const htmllintReporter = (filepath, issues) => {
 
 const checkhtml = () => {
     return gulp.src(paths.html.src)
-        .pipe(ohtml({}, htmllintReporter))
+        .pipe(ohhtml({}, htmllintReporter))
         .pipe(wxmlmin({
             collapseWhitespace: true,
             removeComments: true,
