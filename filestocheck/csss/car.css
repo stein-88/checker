@@ -1,15 +1,15 @@
-.titulo {
+.titulos {
     background: #517b88;
     font-size: 20px;
     color: white;
     padding: 10px 20px;
 }
 
-.corzinha {
+.cor {
     color: #632a44;
 }
 
-.botao {
+.botaozinho {
     cursor: pointer;
     padding: 10px 4rem;
     color: white;

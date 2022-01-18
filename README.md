@@ -6,9 +6,11 @@
 
 ## Usage
 
-- Colocar os arquivos `.html` na pasta `assets/`.
-- Colocar os arquivos `.css` na pasta `assets/style/`.
-- Colocar os arquivos `.js` e `.json` na pasta `assets/scripts/`.
+- O arquivo que deseja verificar deve estar na pasta `filestocheck/`
+
+- Arquivos minificados `.html` vao para a pasta `assets/`.
+- Arquivos minificados `.css` vao para a pasta `assets/style/`.
+- Arquivos minificados `.js` e `.json` vao para a pasta `assets/scripts/`.
 
 - Rodar os seguintes comandos:
 - `yarn chtml` para verificar arquivos HTML.

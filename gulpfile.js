@@ -1,5 +1,4 @@
 const gulp = require('gulp')
-const csscomb = require('gulp-csscomb')
 const jsonlint = require("gulp-jsonlint")
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
@@ -9,22 +8,24 @@ const ohtml = require('gulp-htmllint')
 const colors = require('ansi-colors')
 const babel = require('gulp-babel')
 const cleanCSS = require('gulp-clean-css')
+const wxmlmin = require('gulp-wxml-min')
+const eslint = require('gulp-eslint')
 
 const paths = {
     js: {
-        src: './filestocheck/*.js',
+        src: './filestocheck/jss/*.js',
         dest: './assets/scripts'
     },
     json: {
-        src: './filestocheck/*.json',
+        src: './filestocheck/jsons/*.json',
         dest: './assets/scripts'
     },
     css: {
-        src: './filestocheck/*.css',
+        src: './filestocheck/csss/*.css',
         dest: './assets/style'
     },
     html: {
-        src: './filestocheck/*.html',
+        src: './filestocheck/htmls/*.html',
         dest: './assets'
     }
 }
@@ -35,17 +36,10 @@ const clean = () => {
 
 const checkcss = () => {
     return gulp.src(paths.css.src)
-        .pipe(csscomb())
-}
-
-const mincss = () => {
-    return gulp.src(paths.css.src)
-        .pipe(sourcemaps.init())
         .pipe(cleanCSS())
-        .pipe(sourcemaps.write())
+        .pipe(concat('main.min.css'))
         .pipe(gulp.dest(paths.css.dest))
 }
-
 
 const myCustomReporter = (file) => {
     log('File ' + file.path + ' is not valid JSON.')
@@ -55,9 +49,7 @@ const checkjson = () => {
     return gulp.src(paths.json.src)
         .pipe(jsonlint())
         .pipe(jsonlint.reporter(myCustomReporter))
-        .pipe(uglify())
-        .pipe(concat('main.min.js'))
-        .pipe(gulp.dest(paths.js.dest))
+        .pipe(gulp.dest(paths.json.dest))
 }
 
 const htmllintReporter = (filepath, issues) => {
@@ -68,38 +60,44 @@ const htmllintReporter = (filepath, issues) => {
         process.exitCode = 1
     }
 }
+
 const checkhtml = () => {
     return gulp.src(paths.html.src)
         .pipe(ohtml({}, htmllintReporter))
-        .pipe(uglify())
-        .pipe(concat('main.min.js'))
-        .pipe(gulp.dest(paths.js.dest))
+        .pipe(wxmlmin({
+            collapseWhitespace: true,
+            removeComments: true,
+            keepClosingSlash: true
+        }))
+        .pipe(gulp.dest(paths.html.dest))
 }
 
 const checkjs = () => {
     return gulp.src(paths.js.src, { sourcemaps: true })
         .pipe(babel())
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
         .pipe(uglify())
         .pipe(concat('main.min.js'))
         .pipe(gulp.dest(paths.js.dest))
 }
-const watchjs = () => {
-    return gulp.watch(paths.js.src, checkjs)
-}
-const build = gulp.series(clean, gulp.parallel(checkjs))
 
-const watchcss = () => {
-    return gulp.watch(paths.css.src, checkcss)
+const watcher = () => {
+    gulp.watch(paths.js.src, checkjs)
+    gulp.watch(paths.css.src, checkcss)
+    gulp.watch(paths.json.src, checkjson)
+    gulp.watch(paths.html.src, checkhtml)
+    return null
 }
+
+const build = gulp.series(clean, gulp.parallel(checkjs, checkjson, checkhtml, checkcss))
 
 exports.checkjson = checkjson
 exports.checkhtml = checkhtml
 exports.checkcss = checkcss
-exports.mincss = mincss
 exports.checkjs = checkjs
 exports.clean = clean
-exports.watchjs = watchjs
-exports.watchcss = watchcss
+exports.watcher = watcher
 exports.build = build
-
-//exports.default = 'adefinir'
+exports.default = build
