@@ -1,13 +1,11 @@
-# checker
-
 ## Objetivo
 
-Atraves desse repositório você poderá
-- Verificar se existe algum erro na sintaxe dos seguintes formatos:
-`HTML, CSS, JavaScript e JSON`
-- Minificar todo o conteúdo dos formatos, exceto JSON.
-- Atualizar em tempo real enquanto gera o código.
-- Deixa seu código pronto para ser usado em `production`.
+Atraves desse repositório será possível.
+
+- Deixa o código pronto para ser usado em `production`.
+  - Rodando indivualmente nos seguintes formatos: `HTML, CSS, JavaScript e JSON`.
+  - Ou rodando todos os formatos ao mesmo tempo.
+- Utilizando o watcher, atualiza em tempo real os arquivos para produção.
 
 ## Install
 
@@ -15,31 +13,55 @@ Atraves desse repositório você poderá
 
 ## Usage
 
-- Os arquivos HTML devem estar na pasta `filestocheck/htmls`
-- Os arquivos CSS devem estar na pasta `filestocheck/csss`
+- Os arquivos HTML devem estar na pasta `filestocheck/templates`
+- Os arquivos CSS devem estar na pasta `filestocheck/styles`
 - Os arquivos JSON devem estar na pasta `filestocheck/jsons`
-- Os arquivos JavaScript devem estar na pasta `filestocheck/jss`
+- Os arquivos JavaScript devem estar na pasta `filestocheck/scripts`
 
-- Arquivos minificados `.html` vao para a pasta `assets/`.
-- Arquivos minificados `.css` vao para a pasta `assets/style/`.
-- Arquivos minificados `.js` e `.json` vao para a pasta `assets/scripts/`.
+Production sera gerado dessa forma:
+assets/scripts/ ---> .js e .json
+assets/style/ ----> .css
+assets ---> html
 
-Você pode rodar os seguintes comandos:
-- `yarn checkhtml` para verificar arquivos HTML.
+Comandos:
+- `yarn checkhtml`
+  - Procura os arquivos HTML na pasta `filestocheck/templates`.
+  - Verifica erros no HTML.
+  - Minimifica o HTML.
+  - Exporta para a pasta `assets`
+  - Caso apresente um erro de HTML que deseja ignorar utilize o arquivo `.htmllintrc`. Verifique a lista de exclusões no seguinte [website](https://github.com/htmllint/htmllint/wiki/Options)
+
 - `yarn checkcss` para verificar arquivos CSS.
+  - Procura os arquivos CSS na pasta `filestocheck/styles`.
+  - Verifica erros no CSS.
+  - Minimifica o CSS.
+  - Exporta para a pasta `assets/style`
+
 - `yarn checkjs` para verificar arquivos JavaScript.
+  - Procura os arquivos JavaScript na pasta `filestocheck/scripts`.
+  - Verifica erros no JavaScript.
+  - Minimifica o JavaScript.
+  - Exporta para a pasta `assets/scripts`
+  - Caso apresente um erro de JavaScript que deseja ignorar ou fazer alguma cofiguração, utilize o arquivo `.eslintrc`. Você pode verificar a lista de exclusões no seguinte [website](https://github.com/adametry/gulp-eslint)
+
 - `yarn checkjson` para verificar arquivos JSON.
-- `yarn watcher` para verificar alterações nos arquivos em tempo real.
-- `yarn clean` para deletar a pasta assets, que recebe todo o conteúdo gerado a partir das verficações.
-- `yarn build` limpa a pasta assets, em paralelo executa a verificação da sintaxe, minimifica os arquivos e coloca na pasta assets conforme o padrão de cada formato.
-- `yarn default` executa o comando build como padrão.
+  - Procura os arquivos JSON na pasta `filestocheck/jsons`.
+  - Verifica erros no JSON.
+  - Exporta para a pasta `assets/scripts`
 
-Caso apresente um erro de HTML que voce deseja ignorar ultilize o arquivo .htmllintrc. Voce pode verificar a lista de exclusoes no seguinte [website](https://github.com/htmllint/htmllint/wiki/Options)
+- `yarn watcher`
+  - Acompanha em tempo real toda alteração no arquivo fonte, ou seja o arquivo original que está sendo analisado.
 
-Para evitar problemas de compatibilidade nós sugerimos a criação de um arquivo `.babelrc` com a seguinte configuração.
-`{
-  "presets": [ "@babel/preset-env" ]
-}`
+- `yarn clean`
+  - Deleta a pasta assets.
 
-Será necessário também a criação de um arquivo `.eslintrc` com a seguinte configuração.
-`{}` para mais [informações](https://github.com/adametry/gulp-eslint)
+- `yarn build`
+  - Deleta a pasta assets
+  - Executa a verificação da sintaxe
+  - Minimifica os arquivos
+  - Move os arquivos para a nova pasta assets conforme o padrão de cada formato.
+
+- `yarn default`
+  - Executa o comando build como padrão.
+
+Caso deseja verificar a documentação do GULP em que essa documentação foi baseada verifique o seguinte [website](https://github.com/gulpjs/gulp)
